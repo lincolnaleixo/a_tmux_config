@@ -1,0 +1,8 @@
+#!/bin/bash
+gitconfig=https://github.com/robot110011/a_tmux_config
+
+cd
+rm -r a_tmux_config
+git clone $gitconfig
+mv a_tmux_config/* /root
+rm -r a_tmux_config

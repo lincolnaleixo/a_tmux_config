@@ -6,3 +6,4 @@ rm -r a_tmux_config
 git clone $gitconfig
 mv a_tmux_config/* /root
 rm -r a_tmux_config
+rm tmuxconfig

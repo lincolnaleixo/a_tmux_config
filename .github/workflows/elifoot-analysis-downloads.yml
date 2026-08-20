@@ -38,6 +38,10 @@ jobs:
           echo 'ffbebdc75d16c82b931a3480bd5020fc681b252fee35bd930e4f50b5c472908e  downloads/Elifoot98.7z' | sha256sum --check --strict
           echo '41aaba7b1235304ab5aa0624530c67ae829496cd29e875925271efdccc28c03e  downloads/7z2602-linux-x64.tar.xz' | sha256sum --check --strict
           echo 'b62e81a0390618466c019c60d8c2f796ced2509c4c1aea4a37644a77272cf99d  downloads/ghidra_12.1.2_PUBLIC_20260605.zip' | sha256sum --check --strict
+          split --bytes=240M --suffix-length=2 \
+            downloads/ghidra_12.1.2_PUBLIC_20260605.zip \
+            downloads/ghidra.part-
+          test "$(find downloads -maxdepth 1 -name 'ghidra.part-*' | wc -l)" -eq 3
 
       - name: Upload Elifoot archive
         uses: actions/upload-artifact@v4
@@ -55,10 +59,26 @@ jobs:
           compression-level: 0
           retention-days: 1
 
-      - name: Upload Ghidra
+      - name: Upload Ghidra part aa
         uses: actions/upload-artifact@v4
         with:
-          name: ghidra-12.1.2-pinned
-          path: downloads/ghidra_12.1.2_PUBLIC_20260605.zip
+          name: ghidra-part-aa
+          path: downloads/ghidra.part-aa
+          compression-level: 0
+          retention-days: 1
+
+      - name: Upload Ghidra part ab
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghidra-part-ab
+          path: downloads/ghidra.part-ab
+          compression-level: 0
+          retention-days: 1
+
+      - name: Upload Ghidra part ac
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghidra-part-ac
+          path: downloads/ghidra.part-ac
           compression-level: 0
           retention-days: 1

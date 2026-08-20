@@ -7,6 +7,11 @@ on:
     paths:
       - ".github/workflows/elifoot-analysis-downloads.yml"
       - "ELIFOOT_ANALYSIS_DOWNLOADS.md"
+  pull_request:
+    paths:
+      - ".github/workflows/elifoot-analysis-downloads.yml"
+      - "ELIFOOT_ANALYSIS_DOWNLOADS.md"
+      - "ELIFOOT_ANALYSIS_TRIGGER.md"
   workflow_dispatch:
 
 permissions:

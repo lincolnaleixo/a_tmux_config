@@ -1,0 +1,59 @@
+name: Elifoot analysis downloads
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/workflows/elifoot-analysis-downloads.yml"
+      - "ELIFOOT_ANALYSIS_DOWNLOADS.md"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Download hash-pinned public inputs
+        run: |
+          set -euo pipefail
+          mkdir -p downloads
+          curl --fail --location --retry 5 --retry-all-errors \
+            'https://archive.org/download/Elifoot_98_1998_PT_Andre_Elias/Elifoot%2098%20%281998%29%20%28PT%29%20%28Andr%C3%A9%20Elias%29.7z' \
+            --output downloads/Elifoot98.7z
+          curl --fail --location --retry 5 --retry-all-errors \
+            'https://7-zip.org/a/7z2602-linux-x64.tar.xz' \
+            --output downloads/7z2602-linux-x64.tar.xz
+          curl --fail --location --retry 5 --retry-all-errors \
+            'https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_12.1.2_build/ghidra_12.1.2_PUBLIC_20260605.zip' \
+            --output downloads/ghidra_12.1.2_PUBLIC_20260605.zip
+          echo 'ffbebdc75d16c82b931a3480bd5020fc681b252fee35bd930e4f50b5c472908e  downloads/Elifoot98.7z' | sha256sum --check --strict
+          echo '41aaba7b1235304ab5aa0624530c67ae829496cd29e875925271efdccc28c03e  downloads/7z2602-linux-x64.tar.xz' | sha256sum --check --strict
+          echo 'b62e81a0390618466c019c60d8c2f796ced2509c4c1aea4a37644a77272cf99d  downloads/ghidra_12.1.2_PUBLIC_20260605.zip' | sha256sum --check --strict
+
+      - name: Upload Elifoot archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: elifoot98-known-input
+          path: downloads/Elifoot98.7z
+          compression-level: 0
+          retention-days: 1
+
+      - name: Upload 7-Zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: sevenzip-pinned
+          path: downloads/7z2602-linux-x64.tar.xz
+          compression-level: 0
+          retention-days: 1
+
+      - name: Upload Ghidra
+        uses: actions/upload-artifact@v4
+        with:
+          name: ghidra-12.1.2-pinned
+          path: downloads/ghidra_12.1.2_PUBLIC_20260605.zip
+          compression-level: 0
+          retention-days: 1
